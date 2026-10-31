@@ -9,6 +9,56 @@ and the tag must be annotated and version-monotonic.
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-31
+
+### Added
+
+- **Dependency cooldown audits (ADR-005 WRK-180 to WRK-182).** uv, npm,
+  pnpm, Bun, Yarn and Bundler each get a per-turn row and a SessionStart row.
+  They warn when the client's release-age cooldown is missing or under 14
+  days, or when the client is too old to have one. Node audits follow
+  `packageManager`, then the lockfile, then PATH.
+- **Install-script audits (ADR-036 WRK-183 to WRK-185).** npm, pnpm and Yarn
+  warn when the project config turns install-script blocking off, or when
+  the client is older than the first release that blocks by default.
+- **Requirement tests (ADR-034).** In a namespace that binds ctxgrd's
+  `core.requirement-status`, each Implemented requirement is checked for a
+  test named after its key (`adr_033_wrk_150_*`). `wrkgrd reqs`, `wrkgrd reqs
+  test <KEY>` and `verify --reqs` report the matrix. Plain `verify` folds the
+  missing tests into one summary warning; `verify --reqs` errors on each.
+- **clippy, go vet and tsc run per turn** from the catalog, each honouring
+  `[tools.<name>] enabled`. `cargo clippy` replaces `cargo check` as the
+  Rust build step when it is on PATH. tsc runs only from the project's own
+  `node_modules/.bin/tsc` with a `tsconfig.json`, never through npx.
+
+### Fixed
+
+- **A root `verify` checked stacks at the root only (BUG-011, ADR-035).**
+  `wrkgrd.toml` gains `roots` and `skip_roots`. A root run verifies each
+  listed root under that root's own `wrkgrd.toml`, and
+  `nested-manifest-skipped` warns once per tracked manifest no root
+  verifies.
+
+### Changed
+
+- **The CR-019 skip runs on grd's `grd-skip` crate (grd ADR-010).** The key is
+  unchanged. The record moves to
+  `<git-dir>/grd-skip/wrkgrd-<root key>.json`, so the first run after the
+  upgrade runs in full. Building wrkgrd needs grd checked out beside it, at
+  `../grd`.
+- **The skip line is the grd family's (grd ADR-010 GRD-071).** A skipped
+  `verify` prints `wrkgrd: skipped: unchanged since clean run at <UTC>, key
+  <7 hex>` in place of `wrkgrd: verify skipped: code unchanged since green run
+  at …, hash …`. Under `--harness claude` a clean skip now sends that line as
+  the `systemMessage`, with no `decision`; CR-019 kept it silent. Other notes
+  still travel only beside a block.
+- **A run that could not skip says why (grd ADR-010 GRD-072, Open Question
+  9).** With the skip on, `verify` prints `wrkgrd: not skipped: <reason>` on
+  stderr, in place of `wrkgrd: verify not skipped: …`. Outside a git work tree
+  it now prints `wrkgrd: not skipped: not inside a git work tree`; before, it
+  printed nothing. Under `--harness claude` the note goes to stderr only and
+  never into the reply, beside a block included.
+
 ## [0.4.0] - 2026-10-21
 
 ### Added
