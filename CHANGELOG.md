@@ -9,6 +9,47 @@ and the tag must be annotated and version-monotonic.
 
 ## [Unreleased]
 
+## [0.6.1] - 2026-11-01
+
+### Changed
+
+- **The end-of-turn run no longer builds (ADR-037 WRK-192).** `node-build`,
+  `go-build` and `swift-build` move to the `pre-commit-hook` context, and a
+  SHACL shape rejects any other build at the end of a turn. `verify
+  --harness claude` runs type check and lint only, plus `cargo check` when
+  clippy is off, because it generates no code. Plain `verify` still runs
+  each build before its tests, so `skip_tests_if_build_fails` still applies.
+
+## [0.6.0] - 2026-11-01
+
+### Added
+
+- **A run on the same tree waits for the run already going (ADR-037
+  WRK-190).** Plain `verify` holds a lock from its first key to its record.
+  A second plain run on the same key prints `wrkgrd: waiting for wrkgrd run
+  <pid> (verify, started <n> s ago) on the same tree` to stderr, waits, and
+  skips when that run ended green. A run on a different key does not wait.
+  Each key build also holds a short lock on the private index. The locks
+  live in `<git-dir>/grd-skip/lock-*`; the OS frees them when a run exits.
+
+### Changed
+
+- **The end-of-turn run no longer runs the test runners (ADR-037 WRK-186,
+  WRK-187).** Every test tool moves to the `pre-commit-hook` context, and a
+  SHACL shape rejects one at the end of a turn. `verify --harness claude`
+  runs build, lint and type check only. Plain `verify` (pre-commit, manual,
+  CI) still runs every stack runner. Under `--harness`, `cargo clippy`
+  stands in for `cargo check` when it is on PATH (WRK-188).
+- **The end-of-turn run never skips (ADR-037 WRK-189).** `verify --harness`
+  builds no CR-019 key, reads, writes or deletes no record, takes no lock
+  and prints no skip line. A red turn no longer deletes plain `verify`'s
+  record.
+- **Scoped modes name the check that ran (ADR-037 WRK-191).** With no
+  diagnostics, `--pre-push` prints `wrkgrd: release guard passed (stack
+  runners not run)`, in place of `wrkgrd: all detected stacks passed`.
+  `--staged`, `--commit-msg`, `--anchors`, `--links`, `--bugs`, `--reqs` and
+  `--stdlib-only` print the same shape. JSON output is unchanged.
+
 ## [0.5.0] - 2026-10-31
 
 ### Added
