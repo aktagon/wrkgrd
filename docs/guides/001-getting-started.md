@@ -78,7 +78,8 @@ Any other table (e.g. `[commands]`) is ignored by design.
 
 `wrkgrd hooks install` installs the tracked convention: a committed
 `.githooks/pre-commit` that runs `wrkgrd verify --staged` (a staged-diff secret
-scan) and then `wrkgrd verify`, plus a `.githooks/commit-msg` that checks the
+scan) and then `wrkgrd verify --pre-commit` (the builds and lint, no tests; run
+plain `wrkgrd verify` for the test suite), plus a `.githooks/commit-msg` that checks the
 Conventional Commits subject, a `scripts/setup-hooks.sh` bootstrap, and
 `core.hooksPath .githooks` set so the hooks are active immediately. The hooks
 hard-gate: a clone that has activated them but lacks wrkgrd on `PATH` aborts the

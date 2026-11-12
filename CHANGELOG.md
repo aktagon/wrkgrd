@@ -9,6 +9,37 @@ and the tag must be annotated and version-monotonic.
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-11-12
+
+### Added
+
+- **`verify --pre-commit`, the pre-commit hook path (ADR-037 WRK-195,
+  WRK-197).** It runs the per-turn and pre-commit runners, the builds
+  included, and no test runner. Plain `verify` still runs the tests. The
+  fragment `hooks install` writes now ends with `exec wrkgrd verify
+  --pre-commit`; rerun `wrkgrd hooks install` to get it.
+- **A stale hook warns (ADR-038 WRK-199).** The new `stale-hook` audit warns
+  once per hook wrkgrd wrote that this version writes differently (the
+  pre-commit fragment, `commit-msg`, `pre-push`, and the Claude Stop hook
+  entry), and points at `grd doctor --fix`. It never fails the run.
+- **`hooks install --dry-run --format json` (ADR-038 WRK-205)** prints one
+  object with each file's path, body and whether the installed copy matches.
+- **A failure names its command (ADR-038 WRK-201)** in the text header and in
+  a JSON `command` field.
+- **Rust diagnostics carry their location (ADR-038 WRK-202).** `cargo-clippy`
+  and `cargo-test` run with `--message-format=json`; the diagnostic sets
+  `file`, `line` and `col` from the first error.
+
+### Changed
+
+- **Two scoped mode flags together are misuse (ADR-038 WRK-198)** and exit 2.
+- **A passing `--pre-commit` run says the tests did not run (ADR-038
+  WRK-200).**
+- **The end-of-turn block reason holds errors only (ADR-038 WRK-203).**
+- **The help text is for users (ADR-038 WRK-204):** no document ids or
+  implementation notes; the examples list `verify --pre-commit`, and `verify
+  --help` states the exit codes.
+
 ## [0.6.1] - 2026-11-01
 
 ### Changed
