@@ -9,6 +9,15 @@ and the tag must be annotated and version-monotonic.
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-11-12
+
+### Added
+
+- **A failing blocking lint says how to turn it off (ROADMAP-012).** Its help
+  line says to fix the errors, and to ask the user before setting
+  `[tools.<name>] enabled = false` when they predate the change. Builds,
+  tests, type checks and the secret scan get no such line.
+
 ## [0.7.0] - 2026-11-12
 
 ### Added
