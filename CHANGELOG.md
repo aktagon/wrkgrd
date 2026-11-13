@@ -9,6 +9,14 @@ and the tag must be annotated and version-monotonic.
 
 ## [Unreleased]
 
+## [0.8.1] - 2026-11-13
+
+### Fixed
+
+- **A ruff that is not installed warns, and no longer blocks as lint errors
+  (BUG-021).** wrkgrd runs ruff only when it is in the project's `.venv` or on
+  PATH. Otherwise it warns "ruff is not installed" and skips the step.
+
 ## [0.8.0] - 2026-11-12
 
 ### Added
