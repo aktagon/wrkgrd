@@ -34,7 +34,9 @@ Or download the archive for your platform from the
   failing build skips the redundant test step. Advisory config audits (weak
   lint/compiler configuration) warn but never fail the run.
 - `wrkgrd init` — write a starter `wrkgrd.toml` to the project root. `--force`
-  overwrites an existing file.
+  overwrites an existing file. It then prints the stacks detected at the root,
+  each nested manifest no root verifies with a `roots = [...]` line to paste,
+  and the commands to run next.
 - `wrkgrd rules` — list the verification-tool catalog grouped by stack (tool
   name, check-kind, tier, severity, context, implemented), then show per-stack
   detection state. `wrkgrd rules <tool>` prints one tool's full classification.
@@ -48,7 +50,16 @@ Or download the archive for your platform from the
 - `--root <PATH>` — project root for all commands (default: the nearest
   ancestor holding a `wrkgrd.toml`, else the current directory).
 - `--format text|json` — `text` (default) is human-readable; `json` emits
-  machine-readable output for CI pipelines.
+  machine-readable output for CI pipelines. On plain `verify` and
+  `verify --pre-commit`, the JSON object has a `steps` array: one entry per
+  planned build, lint, type check or test command, with `root` (`.` for the
+  top root), `stack`, `code`, `command` and `outcome` (`passed`, `failed`,
+  `warned` or `skipped`). A skipped or warned step has a `reason`:
+  `unchanged` (the code is unchanged since a green run), `build-failed`
+  (`skip_tests_if_build_fails`), `cannot-run` (its warning says why),
+  `model-unchanged` (a TLA+ spec that already passed) or `not-checked`.
+  A TLC step's `command` keeps the `<tmp>` token for TLC's metadata folder,
+  which is new on each run and deleted after it.
 
 ## wrkgrd.toml toggles
 

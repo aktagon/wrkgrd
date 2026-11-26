@@ -1,0 +1,15 @@
+# wrkgrd
+
+> A verification gate for source trees. wrkgrd detects which language stacks a repository uses, runs each stack's build and tests, and reports only failures in compact, color-free output.
+
+## Docs
+
+- [README](README.md): install and basic use
+- [Getting started](docs/guides/001-getting-started.md): install, commands, flags, `wrkgrd.toml` toggles, exit codes
+- [Rules reference](docs/guides/002-rules-reference.md): every stack and verification tool, generated from `wrkgrd rules --format json`
+- [Features reference](docs/guides/003-features-reference.md): every capability and harness adapter, generated from `wrkgrd features --format json`
+
+## Optional
+
+- [Changelog](CHANGELOG.md): changes per release
+- [Security policy](SECURITY.md): how to report a vulnerability privately

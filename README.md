@@ -44,6 +44,8 @@ contract. `wrkgrd hooks claude` prints the hook configuration.
 ## Documentation
 
 - [Getting started](docs/guides/001-getting-started.md)
+- [Rules reference](docs/guides/002-rules-reference.md)
+- [Features reference](docs/guides/003-features-reference.md)
 - [Changelog](CHANGELOG.md)
 
 ## License

@@ -9,6 +9,29 @@ and the tag must be annotated and version-monotonic.
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-11-26
+
+### Added
+
+- **The stdlib-only policy covers SwiftPM (ADR-021 WRK-220).** With
+  `[stdlib-only] enable = true`, `stdlib-only-swift` warns once per package in
+  the `dependencies` array of `swift package dump-package`. It skips when
+  `swift` is not on PATH.
+- **TypeScript project references are type-checked (CR-022).** When the root
+  `tsconfig.json` lists `references`, as Vite's templates do, wrkgrd runs
+  `tsc --noEmit --composite false --incremental false -p <ref>` for each one.
+  Before, the root check passed over every error in those projects. The step
+  writes no file. A referenced project with references of its own warns
+  instead, because only `tsc -b` checks it and `tsc -b` writes
+  `.tsbuildinfo` files.
+- **`verify --format json` lists the steps it ran (CR-022).** Plain `verify`
+  and `verify --pre-commit` add a `steps` array: root, stack, code, command,
+  outcome, and the reason a step was skipped. No existing field changes.
+- **`wrkgrd init` says what to do next (CR-022).** After creating the config
+  it prints the detected stacks, each nested manifest no root verifies with a
+  `roots = [...]` line, and the next commands. The template documents
+  top-level `roots` and `skip_roots`.
+
 ## [0.8.1] - 2026-11-13
 
 ### Fixed
